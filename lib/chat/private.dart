@@ -53,8 +53,9 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                         var  name = child['userName'];
                         var message = child['message'];
                         var imageUrl = child['imageUrl'];
+                        var userId = child['userId'];
 
-                        list.add(PrivateModel(name: name, imageUrl: imageUrl, message: message));
+                        list.add(PrivateModel(name: name, imageUrl: imageUrl, message: message,userId: userId));
                       }
                       return ListView.builder(
                         itemCount: list.length,

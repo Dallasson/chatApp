@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:language/authentication/auth.dart';
 import 'package:language/chat/private.dart';
 import 'package:language/models/message.dart';
@@ -16,6 +17,7 @@ class PublicPage extends StatefulWidget {
 
 class _PublicPageState extends State<PublicPage> {
 
+  var isCurrentUser = false;
   TextEditingController textEditingController = new TextEditingController();
 
    late List<MessageModel> list = [];
@@ -99,32 +101,39 @@ class _PublicPageState extends State<PublicPage> {
                                   ),
                                 ),
                               ),
-                              PopupMenuButton(
-                                icon: Icon(Icons.more_vert),
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    child: GestureDetector(
-                                      child: Text('Send Message',style: TextStyle(fontFamily: 'source'),),
-                                      onTap: (){
-                                        if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
-                                          Navigator.pop(context);
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(
-                                              id : list[index].userId
-                                          )));
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        AuthService().sendFriendRequest(list[index].userId, list[index].name);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Add Friend',style: TextStyle(fontFamily: 'source'),),
+                              Visibility(
+                                visible: true,
+                                child:  PopupMenuButton(
+                                  icon: Icon(Icons.more_vert),
+                                  itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        child: GestureDetector(
+                                          child: Text('Send Message',style: TextStyle(fontFamily: 'source'),),
+                                          onTap: (){
+                                            if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
+                                              Navigator.pop(context);
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(
+                                                  id : list[index].userId
+                                              )));
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
+                                              AuthService().sendFriendRequest(list[index].userId, list[index].name);
+                                              Fluttertoast.showToast(msg: "A Friend request has been sent");
+                                              Navigator.pop(context);
+                                            }
+
+                                          },
+                                          child: Text('Add Friend',style: TextStyle(fontFamily: 'source'),),
+                                        )
                                     )
-                                  )
-                                ],
+                                  ],
+                                ),
                               )
                             ],
                           ),

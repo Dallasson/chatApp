@@ -78,12 +78,17 @@ class _RequestsPageState extends State<RequestsPage> {
                                   padding: const EdgeInsets.only(left: 5,right: 5),
                                   child: ElevatedButton(onPressed: (){
                                     AuthService().updateFriendRequest('accepted',list[index].senderId,list[index].userName);
+                                    AuthService().deleteUserFriendship(list[index].senderId);
+                                    setState(() {
+                                      list.removeAt(index);
+                                    });
+
                                   }, child: Text('Accept')),
                                 )),
                                 Expanded(child: Padding(
                                   padding: const EdgeInsets.only(left: 5,right: 5),
                                   child: ElevatedButton(onPressed: (){
-                                    AuthService().updateFriendRequest('rejected',list[index].senderId,list[index].userName);
+                                    AuthService().deleteUserFriendship(list[index].senderId);
                                     setState(() {
                                       list.removeAt(index);
                                     });

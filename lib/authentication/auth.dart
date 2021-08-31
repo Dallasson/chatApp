@@ -115,6 +115,7 @@ class AuthService {
     userMessage['message'] = message;
     userMessage['userName'] = userName;
     userMessage['imageUrl'] = imageUrl;
+    userMessage['userId'] = userId;
 
     await databaseReference.child('privateMessages').child(firebaseAuth.currentUser!.uid).child(uuid.v1()).set(userMessage);
     await databaseReference.child('privateMessages').child(userId).child(uuid.v1()).set(userMessage);
@@ -158,13 +159,20 @@ class AuthService {
     map['senderId'] = firebaseAuth.currentUser!.uid;
     map['time'] = DateTime.now().toString();
 
-    deleteUserRequest(userId);
 
     return databaseReference.child(userId).child(firebaseAuth.currentUser!.uid).update(map);
   }
 
-  Future deleteUserRequest(String senderId) async {
+  Future deleteUserFriendship(String senderId) async {
+    print('senderID' + senderId);
+    print(firebaseAuth.currentUser!.uid);
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('requests');
-    return databaseReference.child(senderId).child(firebaseAuth.currentUser!.uid).remove();
+    return databaseReference.child(firebaseAuth.currentUser!.uid).child(senderId).remove();
   }
+
+  Stream<Event?> getApprovals()  {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
+    return databaseReference.child(firebaseAuth.currentUser!.uid).onValue;
+  }
+
 }

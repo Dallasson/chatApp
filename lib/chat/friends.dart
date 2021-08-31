@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:language/authentication/auth.dart';
+import 'package:language/chat/private.dart';
 import 'package:language/models/private.dart';
 
 class FriendsPage extends StatefulWidget {
@@ -40,42 +41,50 @@ class _FriendsPageState extends State<FriendsPage> {
                var name = child['userName'];
                var imageUrl = child['imageUrl'];
                var message = child['message'];
+               var userId = child['userId'];
 
-               list.add(PrivateModel(name: name, imageUrl: imageUrl, message: message));
+               list.add(PrivateModel(name: name, imageUrl: imageUrl, message: message,userId: userId));
              }
              return ListView.builder(
                itemCount: list.length,
                itemBuilder: (context,index){
                  return Padding(
                    padding: const EdgeInsets.all(10),
-                   child: Container(
-                     height: 60,
-                     child: Row(
-                       children: [
-                         CircleAvatar(
-                           radius: 30,
-                           backgroundColor: Colors.transparent,
-                           backgroundImage: NetworkImage(list[index].imageUrl),
-                         ),
-                         SizedBox(width: 10,),
-                         Expanded(
-                           child: Padding(
-                             padding: const EdgeInsets.only(top: 10),
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text(list[index].name),
-                                 SizedBox(height: 3,),
-                                 Container(
-                                   color : Colors.black12,
-                                   child : Text(list[index].message),
-                                 )
-                               ],
+                   child: GestureDetector(
+                     child: Container(
+                       height: 60,
+                       child: Row(
+                         children: [
+                           CircleAvatar(
+                             radius: 30,
+                             backgroundColor: Colors.transparent,
+                             backgroundImage: NetworkImage(list[index].imageUrl),
+                           ),
+                           SizedBox(width: 10,),
+                           Expanded(
+                             child: Padding(
+                               padding: const EdgeInsets.only(top: 10),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(list[index].name),
+                                   SizedBox(height: 3,),
+                                   Container(
+                                     color : Colors.black12,
+                                     child : Text(list[index].message),
+                                   )
+                                 ],
+                               ),
                              ),
                            ),
-                         ),
-                       ],
+                         ],
+                       ),
                      ),
+                     onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(
+                           id : list[index].userId
+                       )));
+                     },
                    ),
                  );
                },
