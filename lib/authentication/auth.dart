@@ -57,7 +57,7 @@ class AuthService {
       print(e.toString());
     }
   }
-  
+
   Future uploadUserImage(File file,String email , String userName, BuildContext context) async {
 
     Reference reference = FirebaseStorage.instance.ref().child('images');
@@ -126,10 +126,45 @@ class AuthService {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('private');
     return databaseReference.child('privateMessages').child(firebaseAuth.currentUser!.uid).onValue;
   }
-  
+
   Stream<Event?> getLastMessage(){
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('lastMessage');
     return databaseReference.child(firebaseAuth.currentUser!.uid).onValue;
   }
 
+  Future sendFriendRequest(String receiverId,String senderName){
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('requests');
+
+    Map<String,dynamic> map = new HashMap();
+    map['userName'] = senderName;
+    map['status'] = 'pending';
+    map['senderId'] = firebaseAuth.currentUser!.uid;
+    map['time'] = DateTime.now().toString();
+
+    return databaseReference.child(receiverId).child(firebaseAuth.currentUser!.uid).set(map);
+  }
+
+  Future<DataSnapshot> getFriendRequest() async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('requests');
+    return databaseReference.child(firebaseAuth.currentUser!.uid).once();
+  }
+
+  Future updateFriendRequest(String status ,String userId,String name) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
+
+    Map<String,dynamic> map = new HashMap();
+    map['name'] = name;
+    map['status'] =  status;
+    map['senderId'] = firebaseAuth.currentUser!.uid;
+    map['time'] = DateTime.now().toString();
+
+    deleteUserRequest(userId);
+
+    return databaseReference.child(userId).child(firebaseAuth.currentUser!.uid).update(map);
+  }
+
+  Future deleteUserRequest(String senderId) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('requests');
+    return databaseReference.child(senderId).child(firebaseAuth.currentUser!.uid).remove();
+  }
 }

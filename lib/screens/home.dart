@@ -4,6 +4,7 @@ import 'package:language/authentication/auth.dart';
 import 'package:language/chat/friends.dart';
 import 'package:language/chat/profile.dart';
 import 'package:language/chat/public.dart';
+import 'package:language/chat/requests.dart';
 import 'package:language/models/user.dart';
 import 'package:language/screens/auth/login.dart';
 
@@ -30,7 +31,10 @@ class _HomePageState extends State<HomePage> {
               AuthService().getUser(null);
               firebaseAuth.signOut();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-            }, icon: Icon(Icons.exit_to_app))
+            }, icon: Icon(Icons.exit_to_app)),
+            IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => RequestsPage()));
+            }, icon: Icon(Icons.chat))
           ],
           bottom: TabBar(
             tabs: [
@@ -38,6 +42,20 @@ class _HomePageState extends State<HomePage> {
               Tab(text: 'History',),
               Tab(text: 'Profile',)
             ],
+          ),
+        ),
+        drawer: Drawer(
+          child: SafeArea(
+            child: Column(
+              children: [
+                ListTile(title: Text('Friends Online'),),
+                ListTile(title: Text('Item'),),
+                ListTile(title: Text('Item'),),
+                ListTile(title: Text('Item'),),
+                ListTile(title: Text('Item'),),
+                ListTile(title: Text('Item'),),
+              ],
+            ),
           ),
         ),
         body: TabBarView(

@@ -85,14 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
             }
         }
         return  Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/error.png',height: 70,width: 70,),
-              SizedBox(height: 5,),
-              Text('Nothing Found')
-            ],
-          ),
+          child: Text(''),
         );
       },
     );

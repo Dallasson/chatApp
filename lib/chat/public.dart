@@ -18,23 +18,31 @@ class _PublicPageState extends State<PublicPage> {
 
   TextEditingController textEditingController = new TextEditingController();
 
-   List<MessageModel> list = [];
+   late List<MessageModel> list = [];
 
    String name ='';
    String message = '';
    String imageUrl = '';
    String userId = '';
    late MessageModel messageModel;
+
+  late Stream<Event?> stream;
+
+  @override
+  void initState() {
+    super.initState();
+    stream = AuthService().getMessages();
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    Provider.of<Event?>(context);
     list.clear();
     return Column(
       children: [
         Expanded(child: Container(
             child: StreamBuilder<Event?>(
-              initialData: null,
-            stream: AuthService().getMessages(),
+            stream: stream,
             builder: (context,data){
               if(data.hasError){
                 return Center(
@@ -65,52 +73,60 @@ class _PublicPageState extends State<PublicPage> {
                     itemBuilder: (context,index){
                       return Padding(
                         padding: const EdgeInsets.all(10),
-                        child: GestureDetector(
-                          onTap: (){
-                             if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
-                               Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(
-                                   id : list[index].userId
-                               )));
-                             }
-                          },
-                          child: Container(
-                            height: 60,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage: NetworkImage(list[index].imageUrl),
-                                ),
-                                SizedBox(width: 10,),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(list[index].name),
-                                        SizedBox(height: 3,),
-                                        Container(
-                                          color : Colors.black12,
-                                          child : Text(list[index].message),
-                                        )
-                                      ],
-                                    ),
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: NetworkImage(list[index].imageUrl),
+                              ),
+                              SizedBox(width: 10,),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(list[index].name,style: TextStyle(fontFamily: 'source'),),
+                                      SizedBox(height: 3,),
+                                      Container(
+                                        color : Colors.black12,
+                                        child : Text(list[index].message),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                IconButton(onPressed: (){
-                                  PopupMenuButton(
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          child: Text("Send Message"),
-                                          value: 1,
-                                        ),
-                                      ]
-                                  );
-                                }, icon: Icon(Icons.airplanemode_on))
-                              ],
-                            ),
+                              ),
+                              PopupMenuButton(
+                                icon: Icon(Icons.more_vert),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    child: GestureDetector(
+                                      child: Text('Send Message',style: TextStyle(fontFamily: 'source'),),
+                                      onTap: (){
+                                        if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
+                                          Navigator.pop(context);
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(
+                                              id : list[index].userId
+                                          )));
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        AuthService().sendFriendRequest(list[index].userId, list[index].name);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Add Friend',style: TextStyle(fontFamily: 'source'),),
+                                    )
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ),
                       );
@@ -131,14 +147,7 @@ class _PublicPageState extends State<PublicPage> {
                 }
               }
               return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/error.png',height: 70,width: 70,),
-                    SizedBox(height: 5,),
-                    Text('Nothing Found')
-                  ],
-                ),
+                child: Text(''),
               );
             },
           ),
