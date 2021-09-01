@@ -67,11 +67,11 @@ class _FriendsPageState extends State<FriendsPage> {
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
-                                   Text(list[index].name),
+                                   Text(list[index].name,style: TextStyle(color: Colors.white),),
                                    SizedBox(height: 3,),
                                    Container(
                                      color : Colors.black12,
-                                     child : Text(list[index].message),
+                                     child : Text(list[index].message,style: TextStyle(color: Colors.white),),
                                    )
                                  ],
                                ),

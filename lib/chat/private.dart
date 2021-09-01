@@ -18,6 +18,8 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
   TextEditingController textEditingController = new TextEditingController();
 
   List<PrivateModel> list = [];
+  String currentUserName = '';
+  String currentUserImage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +81,11 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(list[index].name),
+                                          Text(list[index].name,style: TextStyle(color: Colors.white),),
                                           SizedBox(height: 3,),
                                           Container(
                                             color : Colors.black12,
-                                            child : Text(list[index].message),
+                                            child : Text(list[index].message,style: TextStyle(color: Colors.white),),
                                           )
                                         ],
                                       ),
@@ -100,9 +102,9 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset('assets/images/error.png',height: 70,width: 70,),
+                            Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                             SizedBox(height: 5,),
-                            Text('Nothing Found')
+                            Text('Nothing Found',style: TextStyle(color: Colors.white),)
                           ],
                         ),
                       );
@@ -112,9 +114,9 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/error.png',height: 70,width: 70,),
+                        Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                         SizedBox(height: 5,),
-                        Text('Nothing Found')
+                        Text('Nothing Found',style: TextStyle(color: Colors.white),)
                       ],
                     ),
                   );
@@ -131,12 +133,13 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                   );
                 }
                 if(data.connectionState == ConnectionState.done){
-                  var userName = data.data!.value['userName'];
-                  var imageUrl = data.data!.value['userImage'];
+                  currentUserName = data.data!.value['userName'];
+                  currentUserImage = data.data!.value['userImage'];
                   return Container(
                     width: double.infinity,
                     height: 60,
                     child: Card(
+                      color: Color(0xff333652),
                       elevation: 10,
                       child: Row(
                         children: [
@@ -145,22 +148,22 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                             child: TextFormField(
                               controller: textEditingController,
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  hintText: 'Type Something..'
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                  hintText: 'Type Something..',
+                                  hintStyle: TextStyle(fontStyle: FontStyle.italic,color: Colors.white)
                               ),
-
                             ),
                           )),
                           IconButton(onPressed: (){
                             if(textEditingController.text.isNotEmpty){
-                              AuthService().sendPrivateMessage(textEditingController.text,userName,imageUrl,widget.id);
+                              AuthService().sendPrivateMessage(textEditingController.text,currentUserName,currentUserImage,widget.id);
                               textEditingController.text  = '';
                             }
-                          }, icon: Icon(Icons.send))
+                          }, icon: Icon(Icons.send,color: Colors.white,))
                         ],
                       ),
                     ),

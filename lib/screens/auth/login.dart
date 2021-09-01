@@ -50,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         key: emailKey,
                         child: TextFormField(
                           controller: _emailController,
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                               enabledBorder : OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -71,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: _passwordController,
                           obscureText: true,
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                               enabledBorder : OutlineInputBorder(
                                   borderSide: BorderSide(

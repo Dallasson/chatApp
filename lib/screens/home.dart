@@ -8,7 +8,6 @@ import 'package:language/chat/profile.dart';
 import 'package:language/chat/public.dart';
 import 'package:language/chat/requests.dart';
 import 'package:language/models/notification.dart';
-import 'package:language/models/user.dart';
 import 'package:language/screens/auth/login.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +25,9 @@ class _HomePageState extends State<HomePage> {
    @override
   void initState() {
     super.initState();
+
+    print('id' + FirebaseAuth.instance.currentUser!.uid);
+
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidInitialization = AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitialization = IOSInitializationSettings();
@@ -52,6 +54,9 @@ class _HomePageState extends State<HomePage> {
           , userName + 'Has accepted your friends request , get started', platformChannelSpecifics);
   }
 
+  /*
+  showNotification(name);
+   */
   @override
   Widget build(BuildContext context) {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -82,43 +87,48 @@ class _HomePageState extends State<HomePage> {
         drawer: Theme(
           child: Drawer(
             child: SafeArea(
-              child:  StreamBuilder<Event?>(
-                stream: AuthService().getApprovals(),
-                builder: (context,data){
-                  list.clear();
-                  if(data.hasError){
-                    return Center(
-                      child: Text('No friends',style: TextStyle(color: Colors.white,fontFamily: 'source'),),
-                    );
-                  }
-                  if(data.connectionState == ConnectionState.active){
-                    if(data.data!.snapshot.exists){
-                      Map<dynamic,dynamic> map = data.data!.snapshot.value;
-                      for(var child in map.values){
+              child:  Column(
+                children: [
+                  ListTile(title: Text('Friends List',style: TextStyle(fontFamily: 'source'
+                      ,fontWeight: FontWeight.bold,color: Colors.white),),),
+                 Expanded(child:   StreamBuilder<Event?>(
+                   stream: AuthService().getApprovals(),
+                   builder: (context,data){
+                     list.clear();
+                     if(data.hasError){
+                       return Center(
+                         child: Text('No friends',style: TextStyle(color: Colors.white,fontFamily: 'source'),),
+                       );
+                     }
+                     if(data.connectionState == ConnectionState.active){
+                       if(data.data!.snapshot.exists){
+                         Map<dynamic,dynamic> map = data.data!.snapshot.value;
+                         for(var child in map.values){
 
-                        var status = child['status'];
-                        if(status == 'accepted'){
-                          var time = child['time'];
-                          var name = child['name'];
-                          var senderId = child['senderId'];
+                           var time = child['time'];
+                           var name = child['name'];
+                           var senderId = child['senderId'];
+                           var status = child['status'];
 
-                          showNotification(name);
+                           list.add(NotificationModel(name: name, time: time, status: status, senderId: senderId));
 
-                          list.add(NotificationModel(name: name, time: time, status: status, senderId: senderId));
+                         }
+                         return ListView.builder(
+                             itemCount: list.length,
+                             itemBuilder: (context,index){
+                               return ListTile(title: Text(list[index].name,style: TextStyle(color: Colors.white,
+                                   fontFamily: 'source'),));
+                             }
+                         );
+                       }
+                     }
+                     return Center(
+                       child: Text('No friends',style: TextStyle(fontFamily: 'source',color: Colors.white),),
+                     );
+                   },
+                 ),)
 
-                        }
-                        return Column(
-                          children: List.generate(list.length, (index){
-                            return ListTile(title: Text(list[index].name),);
-                          }),
-                        );
-                      }
-                    }
-                  }
-                  return Center(
-                    child: Text('No friends',style: TextStyle(fontFamily: 'source',color: Colors.white),),
-                  );
-                },
+                ],
               ),
             ),
           ),
@@ -137,4 +147,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

@@ -163,6 +163,20 @@ class AuthService {
     return databaseReference.child(userId).child(firebaseAuth.currentUser!.uid).update(map);
   }
 
+
+  Future updateCurrentUserFriends(String status,String currentUserId,String userId,String name) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
+
+    Map<String,dynamic> map = new HashMap();
+    map['name'] = name;
+    map['status'] =  status;
+    map['senderId'] = currentUserId;
+    map['time'] = DateTime.now().toString();
+
+
+    return databaseReference.child(currentUserId).child(userId).update(map);
+  }
+
   Future deleteUserFriendship(String senderId) async {
     print('senderID' + senderId);
     print(firebaseAuth.currentUser!.uid);
@@ -170,9 +184,10 @@ class AuthService {
     return databaseReference.child(firebaseAuth.currentUser!.uid).child(senderId).remove();
   }
 
+
   Stream<Event?> getApprovals()  {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
-    return databaseReference.child(firebaseAuth.currentUser!.uid).onValue;
+    return databaseReference.child(firebaseAuth.currentUser!.uid).orderByChild('status').equalTo('accepted').onValue;
   }
 
 }

@@ -26,6 +26,8 @@ class _PublicPageState extends State<PublicPage> {
    String message = '';
    String imageUrl = '';
    String userId = '';
+
+   String currentUserName = '';
    late MessageModel messageModel;
 
   late Stream<Event?> stream;
@@ -34,6 +36,7 @@ class _PublicPageState extends State<PublicPage> {
   void initState() {
     super.initState();
     stream = AuthService().getMessages();
+    print('Current User ' + FirebaseAuth.instance.currentUser!.uid);
 
   }
 
@@ -125,7 +128,7 @@ class _PublicPageState extends State<PublicPage> {
                                           child: GestureDetector(
                                             onTap: (){
                                               if(list[index].userId != FirebaseAuth.instance.currentUser!.uid){
-                                                AuthService().sendFriendRequest(list[index].userId, list[index].name);
+                                                AuthService().sendFriendRequest(list[index].userId, currentUserName);
                                                 Fluttertoast.showToast(msg: "A Friend request has been sent");
                                                 Navigator.pop(context);
                                               }
@@ -173,8 +176,10 @@ class _PublicPageState extends State<PublicPage> {
                   );
                 }
                 if(data.connectionState == ConnectionState.done){
-                  var userName = data.data!.value['userName'];
+                  currentUserName = data.data!.value['userName'];
                   var imageUrl = data.data!.value['userImage'];
+
+                  print('this is ' + currentUserName);
                   return Container(
                     width: double.infinity,
                     height: 60,
@@ -188,18 +193,19 @@ class _PublicPageState extends State<PublicPage> {
                             child: TextFormField(
                               controller: textEditingController,
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  hintText: 'Type Something..',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintText: 'Type Something..',
+                                hintStyle: TextStyle(fontStyle: FontStyle.italic,color: Colors.white)
                               ),
                             ),
                           )),
                           IconButton(onPressed: (){
                             if(textEditingController.text.isNotEmpty){
-                              AuthService().sendMessage(textEditingController.text,userName,imageUrl);
+                              AuthService().sendMessage(textEditingController.text,currentUserName,imageUrl);
                               textEditingController.text  = '';
                             }
                           }, icon: Icon(Icons.send,color: Colors.white,))
@@ -213,9 +219,26 @@ class _PublicPageState extends State<PublicPage> {
                 );
               },
             ),
-          )
+          ),
         ],
       )
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
