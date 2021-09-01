@@ -25,6 +25,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
     list.clear();
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF1b1e44),
         title: Text('Private Chat'),
         automaticallyImplyLeading: false,
       ),
@@ -39,9 +40,9 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/error.png',height: 70,width: 70,),
+                          Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                           SizedBox(height: 5,),
-                          Text('Nothing Found')
+                          Text('Nothing Found',style: TextStyle(color: Colors.white),)
                         ],
                       ),
                     );

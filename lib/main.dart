@@ -10,6 +10,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MaterialApp(
     home: MyApp(),
+    theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFF1b1e44)),
     debugShowCheckedModeBanner: false,
   ));
 }

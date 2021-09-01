@@ -21,7 +21,8 @@ class _RequestsPageState extends State<RequestsPage> {
     list.clear();
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Requests'),
+        backgroundColor: Color(0xFF1b1e44),
+        title: Text('Requests'),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<DataSnapshot>(
@@ -32,9 +33,9 @@ class _RequestsPageState extends State<RequestsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/error.png',height: 70,width: 70,),
+                  Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                   SizedBox(height: 5,),
-                  Text('Nothing Found')
+                  Text('Nothing Found',style: TextStyle(color: Colors.white),)
                 ],
               ),
             );
@@ -109,9 +110,9 @@ class _RequestsPageState extends State<RequestsPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/error.png',height: 70,width: 70,),
+                Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                 SizedBox(height: 5,),
-                Text('Nothing Found')
+                Text('Nothing Found',style: TextStyle(color: Colors.white),)
               ],
             ),
           );

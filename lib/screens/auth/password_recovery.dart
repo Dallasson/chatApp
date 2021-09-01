@@ -19,19 +19,19 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
   Widget build(BuildContext context) {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color(0xFF1b1e44),
       body: Container(
         child: Column(
           children: [
             Container(
               height: 200,
               child: Center(
-                child: Text('Password Recovery',style: TextStyle(fontFamily: 'source'),),
+                child: Text('Password Recovery',style: TextStyle(fontSize: 28,fontWeight: FontWeight.bold,color : Colors.white,fontFamily: 'pacifico'),),
               ),
             ),
             Expanded(child:  Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xff2a2b44),
                   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
               ),
               child: Column(
@@ -43,16 +43,21 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                       child: TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                            border : OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.password_outlined),
+                            enabledBorder : OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.white
+                                ),
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            prefixIcon: Icon(Icons.password_outlined,color: Colors.white,),
                             labelText : 'Password',
-                            labelStyle: TextStyle(fontFamily: 'source')
+                            labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20,right: 20),
+                    padding: const EdgeInsets.only(left: 40,right: 40),
                     child: Container(
                       width: double.infinity,
                       child: ElevatedButton(

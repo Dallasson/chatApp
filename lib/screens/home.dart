@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-
   }
 
   void showNotification(String userName){
@@ -61,6 +60,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Chat App'),
+          backgroundColor: Color(0xFF1b1e44),
           actions: [
             IconButton(onPressed: (){
               AuthService().getUser(null);
@@ -75,56 +75,62 @@ class _HomePageState extends State<HomePage> {
             tabs: [
               Tab(text: 'Public',),
               Tab(text: 'History',),
-              Tab(text: 'Profile',)
+              Tab(text: 'Profile',),
             ],
           ),
         ),
-        drawer: Drawer(
-          child: SafeArea(
-            child:  StreamBuilder<Event?>(
-          stream: AuthService().getApprovals(),
-          builder: (context,data){
-            if(data.hasError){
-              return Center(
-                child: Text('No friends'),
-              );
-            }
-            if(data.connectionState == ConnectionState.active){
-               if(data.data!.snapshot.exists){
-                 Map<dynamic,dynamic> map = data.data!.snapshot.value;
-                 for(var child in map.values){
+        drawer: Theme(
+          child: Drawer(
+            child: SafeArea(
+              child:  StreamBuilder<Event?>(
+                stream: AuthService().getApprovals(),
+                builder: (context,data){
+                  list.clear();
+                  if(data.hasError){
+                    return Center(
+                      child: Text('No friends',style: TextStyle(color: Colors.white,fontFamily: 'source'),),
+                    );
+                  }
+                  if(data.connectionState == ConnectionState.active){
+                    if(data.data!.snapshot.exists){
+                      Map<dynamic,dynamic> map = data.data!.snapshot.value;
+                      for(var child in map.values){
 
-                   var status = child['status'];
-                   if(status == 'accepted'){
-                     var time = child['time'];
-                     var name = child['name'];
-                     var senderId = child['senderId'];
+                        var status = child['status'];
+                        if(status == 'accepted'){
+                          var time = child['time'];
+                          var name = child['name'];
+                          var senderId = child['senderId'];
 
-                     showNotification(name);
+                          showNotification(name);
 
-                     list.add(NotificationModel(name: name, time: time, status: status, senderId: senderId));
+                          list.add(NotificationModel(name: name, time: time, status: status, senderId: senderId));
 
-                   }
-                   return Column(
-                     children: List.generate(list.length, (index){
-                       return ListTile(title: Text(list[index].name),);
-                     }),
-                   );
-                 }
-               }
-            }
-            return Center(
-              child: Text('No friends'),
-            );
-          },
-        ),
+                        }
+                        return Column(
+                          children: List.generate(list.length, (index){
+                            return ListTile(title: Text(list[index].name),);
+                          }),
+                        );
+                      }
+                    }
+                  }
+                  return Center(
+                    child: Text('No friends',style: TextStyle(fontFamily: 'source',color: Colors.white),),
+                  );
+                },
+              ),
+            ),
+          ),
+          data: Theme.of(context).copyWith(
+            canvasColor: Color(0xFF1b1e44)
           ),
         ),
         body: TabBarView(
           children: [
             PublicPage(),
             FriendsPage(),
-            ProfilePage()
+            ProfilePage(),
           ],
         ),
       ),

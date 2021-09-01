@@ -21,9 +21,9 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/error.png',height: 70,width: 70,),
+                Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                 SizedBox(height: 5,),
-                Text('Nothing Found')
+                Text('Nothing Found',style: TextStyle(color: Colors.white),)
               ],
             ),
           );
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
                       child: TextFormField(
                         initialValue: email ,
-                        style: TextStyle(fontFamily: 'source'),
+                        style: TextStyle(fontFamily: 'source',color: Colors.white),
                         enabled: false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TextFormField(
                         initialValue: userName,
                         enabled: false,
-                        style: TextStyle(fontFamily: 'source'),
+                        style: TextStyle(fontFamily: 'source',color: Colors.white),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                         ),
@@ -76,9 +76,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/error.png',height: 70,width: 70,),
+                    Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                     SizedBox(height: 5,),
-                    Text('Nothing Found')
+                    Text('Nothing Found',style: TextStyle(color: Colors.white),)
                   ],
                 ),
               );

@@ -25,19 +25,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color(0xFF1b1e44),
       body: Column(
         children: [
           Container(
             height: 200,
             child: Center(
-              child: Text('Chatty',style: TextStyle(fontSize: 38,fontWeight: FontWeight.bold,fontFamily: 'pacifico'),),
+              child: Text('Chatty',style: TextStyle(fontSize: 38,fontWeight: FontWeight.bold,color : Colors.white,fontFamily: 'pacifico'),),
             ),
           ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xff2a2b44),
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30))
               ),
               child: SingleChildScrollView(
@@ -51,10 +51,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.email),
+                              enabledBorder : OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white
+                                ),
+                                borderRadius: BorderRadius.circular(20)
+                              ),
+                              prefixIcon: Icon(Icons.email,color: Colors.white,),
                               labelText: 'Email',
-                              labelStyle: TextStyle(fontFamily: 'source')
+                              labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                           ),
                         ),
                       ),
@@ -67,10 +72,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: _passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.password_outlined),
+                              enabledBorder : OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white
+                                  ),
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              prefixIcon: Icon(Icons.password_outlined,color: Colors.white,),
                               labelText: 'Password',
-                              labelStyle: TextStyle(fontFamily: 'source')
+                              labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                           ),
                         ),
                       ),
@@ -82,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordRecoveryPage()));
                         },
-                        child: Text('Forgot Password !',style: TextStyle(fontFamily: 'source'),),
+                        child: Text('Forgot Password !',style: TextStyle(fontFamily: 'source',color: Colors.white),),
                       ),
                     ),
                     SizedBox(height: 50,),
@@ -108,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()));
                         },
-                        child: Text('No Account!',style: TextStyle(fontFamily: 'source'),),
+                        child: Text('No Account!',style: TextStyle(fontFamily: 'source',color: Colors.white),),
                       ),
                     ),
                   ],

@@ -58,19 +58,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color(0xFF1b1e44),
       body:  Column(
         children: [
           Container(
             height: 200,
             child: Center(
-              child: Text('Chatty',style: TextStyle(fontSize: 38,fontWeight: FontWeight.bold,fontFamily: 'pacifico'),),
+              child: Text('Chatty',style: TextStyle(color: Colors.white,fontSize: 38,fontWeight: FontWeight.bold,fontFamily: 'pacifico'),),
             ),
           ),
           Expanded(
             child : Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xff2a2b44),
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30))
               ),
               child: Padding(
@@ -100,10 +100,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.email),
+                                enabledBorder : OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                prefixIcon: Icon(Icons.email,color: Colors.white,),
                                 labelText: 'Email',
-                                labelStyle: TextStyle(fontFamily: 'source')
+                                labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                             ),
                           ),
                         ),
@@ -116,10 +121,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             controller: _passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                enabledBorder : OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
                                 prefixIcon: Icon(Icons.password_outlined),
                                 labelText: 'Password',
-                                labelStyle: TextStyle(fontFamily: 'source')
+                                labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                             ),
                           ),
                         ),
@@ -131,10 +141,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: TextFormField(
                             controller: _userNameController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.person),
+                                enabledBorder : OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                prefixIcon: Icon(Icons.person,color: Colors.white,),
                                 labelText: 'UserName',
-                                labelStyle: TextStyle(fontFamily: 'source')
+                                labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                             ),
                           ),
                         ),
@@ -170,7 +185,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 10),
-                            child: Text('Have Account !',style: TextStyle(fontFamily: 'source'),),
+                            child: Text('Have Account !',style: TextStyle(fontFamily: 'source',color: Colors.white),),
                           ),
                         ),
                       ),
