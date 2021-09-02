@@ -18,6 +18,7 @@ class _RequestsPageState extends State<RequestsPage> {
   List<RequestModel> list = [];
 
   String currentUserName = '';
+  String currentUserImageUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +54,9 @@ class _RequestsPageState extends State<RequestsPage> {
                     var status = child['status'];
                     var senderId = child['senderId'];
                     var time = child['time'];
+                    var url = child['imageUrl'];
 
-                    list.add(RequestModel(userName: userName, status: status, senderId: senderId, time: time));
+                    list.add(RequestModel(userName: userName, status: status, senderId: senderId, time: time,imageUrl: url));
                   }
                   return ListView.builder(
                     itemCount: list.length,
@@ -69,22 +71,42 @@ class _RequestsPageState extends State<RequestsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Text(list[index].userName,style: TextStyle(fontFamily: 'source',fontSize: 19),),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Text(list[index].status,style: TextStyle(fontFamily: 'source'),),
-                                ),
+                                Row(children: [
+                                  Container(
+                                    height : 40,
+                                    width : 60 ,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle
+                                    ),
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(list[index].imageUrl),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Text(list[index].userName,style: TextStyle(fontFamily: 'source',fontSize: 17),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Text(list[index].status,style: TextStyle(fontFamily: 'source'),),
+                                      ),
+                                    ],
+                                  )
+                                ],),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Expanded(child: Padding(
                                       padding: const EdgeInsets.only(left: 5,right: 5),
                                       child: ElevatedButton(onPressed: (){
-                                        AuthService().updateFriendRequest('accepted',list[index].senderId,currentUserName);
-                                        AuthService().updateCurrentUserFriends('accepted',FirebaseAuth.instance.currentUser!.uid,list[index].senderId,list[index].userName);
+
+                                        AuthService().pushNotification(currentUserName);
+                                        AuthService().updateFriendRequest('accepted',list[index].senderId,currentUserName,currentUserImageUrl);
+                                        AuthService().updateCurrentUserFriends('accepted',FirebaseAuth.instance.currentUser!.uid,list[index].senderId,list[index].userName,list[index].imageUrl);
                                         AuthService().deleteUserFriendship(list[index].senderId);
                                         setState(() {
                                           list.removeAt(index);
@@ -136,7 +158,7 @@ class _RequestsPageState extends State<RequestsPage> {
                 }
                 if(data.connectionState == ConnectionState.done){
                   currentUserName = data.data!.value['userName'];
-                  var imageUrl = data.data!.value['userImage'];
+                  currentUserImageUrl = data.data!.value['userImage'];
 
                   return Text('');
                 }

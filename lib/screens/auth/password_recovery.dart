@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +15,13 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
 
   TextEditingController _emailController = new TextEditingController();
   var emailKey = GlobalKey<FormState>();
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

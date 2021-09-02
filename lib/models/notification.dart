@@ -1,11 +1,10 @@
 
 
-class NotificationModel{
+
+class NotificationModel {
   String name;
+  bool isOpen;
   String time;
-  String status;
-  String senderId;
 
-
-  NotificationModel({required this.name,required this.time,required this.status,required this.senderId});
+  NotificationModel({required this.name,required this.isOpen,required this.time});
 }

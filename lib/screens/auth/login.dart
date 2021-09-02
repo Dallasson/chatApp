@@ -23,6 +23,13 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF1b1e44),

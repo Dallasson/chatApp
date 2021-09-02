@@ -95,9 +95,9 @@ class _FriendsPageState extends State<FriendsPage> {
                child: Column(
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
-                   Image.asset('assets/images/error.png',height: 70,width: 70,),
+                   Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                    SizedBox(height: 5,),
-                   Text('Nothing Found')
+                   Text('Nothing Found',style: TextStyle(color: Colors.white),)
                  ],
                ),
              );

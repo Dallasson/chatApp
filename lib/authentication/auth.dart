@@ -7,12 +7,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:language/models/user.dart';
 import 'package:language/screens/home.dart';
 import 'package:uuid/uuid.dart';
 
 
 class AuthService {
+
+  /////////////////////////////////////// LOGIN / REGISTRATION ////////////////////////////////////
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   var uuid = Uuid();
@@ -79,6 +82,7 @@ class AuthService {
     value['email'] = email;
     value['userName'] =  userName;
     value['userImage'] = imageUrl;
+    value['status'] = 'online';
 
     await ref.child(firebaseAuth.currentUser!.uid).set(value);
 
@@ -90,7 +94,10 @@ class AuthService {
     return await databaseReference.child(firebaseAuth.currentUser!.uid).once();
   }
 
-  Future sendMessage(String message,String userName, String imageUrl) async {
+
+  /////////////////////////////////////////MESSAGES SECTION///////////////////////////////////
+
+  Future sendMessage(String message,String userName, String imageUrl,String galleryImage) async {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference();
 
     Map<String,dynamic> userMessage = new HashMap();
@@ -98,6 +105,7 @@ class AuthService {
     userMessage['userName'] = userName;
     userMessage['imageUrl'] = imageUrl;
     userMessage['userId'] = firebaseAuth.currentUser!.uid;
+    userMessage['gallaryImage'] = galleryImage;
 
     await databaseReference.child('Messages').child(uuid.v1()).set(userMessage);
   }
@@ -133,7 +141,10 @@ class AuthService {
     return databaseReference.child(firebaseAuth.currentUser!.uid).onValue;
   }
 
-  Future sendFriendRequest(String receiverId,String senderName){
+
+  ////////////////////////////////////////////Friends SECTION//////////////////////////////////////
+
+  Future sendFriendRequest(String receiverId,String senderName,String url){
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('requests');
 
     Map<String,dynamic> map = new HashMap();
@@ -141,6 +152,7 @@ class AuthService {
     map['status'] = 'pending';
     map['senderId'] = firebaseAuth.currentUser!.uid;
     map['time'] = DateTime.now().toString();
+    map['imageUrl'] = url;
 
     return databaseReference.child(receiverId).child(firebaseAuth.currentUser!.uid).set(map);
   }
@@ -150,7 +162,7 @@ class AuthService {
     return databaseReference.child(firebaseAuth.currentUser!.uid).once();
   }
 
-  Future updateFriendRequest(String status ,String userId,String name) async {
+  Future updateFriendRequest(String status ,String userId,String name,String imageUrl) async {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
 
     Map<String,dynamic> map = new HashMap();
@@ -158,13 +170,13 @@ class AuthService {
     map['status'] =  status;
     map['senderId'] = firebaseAuth.currentUser!.uid;
     map['time'] = DateTime.now().toString();
+    map['imageUrl'] = imageUrl;
 
 
     return databaseReference.child(userId).child(firebaseAuth.currentUser!.uid).update(map);
   }
 
-
-  Future updateCurrentUserFriends(String status,String currentUserId,String userId,String name) async {
+  Future updateCurrentUserFriends(String status,String currentUserId,String userId,String name,String imageUrl) async {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
 
     Map<String,dynamic> map = new HashMap();
@@ -172,6 +184,7 @@ class AuthService {
     map['status'] =  status;
     map['senderId'] = currentUserId;
     map['time'] = DateTime.now().toString();
+    map['imageUrl'] = imageUrl;
 
 
     return databaseReference.child(currentUserId).child(userId).update(map);
@@ -184,10 +197,47 @@ class AuthService {
     return databaseReference.child(firebaseAuth.currentUser!.uid).child(senderId).remove();
   }
 
-
   Stream<Event?> getApprovals()  {
     DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('approvals');
     return databaseReference.child(firebaseAuth.currentUser!.uid).orderByChild('status').equalTo('accepted').onValue;
   }
 
+  Future uploadImage(PickedFile file) async {
+    Reference reference = FirebaseStorage.instance.ref("userImages");
+
+    TaskSnapshot taskSnapshot = await reference.child(firebaseAuth.currentUser!.uid).child(uuid.v1()).putFile(File(file.path));
+
+    String imageDownloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return imageDownloadUrl;
+
+  }
+
+
+  //////////////////////////////////////////////NOTIFICATION SECTION//////////////////////////////////////////
+
+  Future pushNotification(String name) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('notifications');
+
+    Map<String,dynamic> notificationMap = new HashMap();
+    notificationMap['name'] = name;
+    notificationMap['isOpen'] = false;
+    notificationMap['time'] = DateTime.now().toString();
+    notificationMap['notificationId'] = uuid.v1();
+
+    await databaseReference.child(firebaseAuth.currentUser!.uid).child(uuid.v1()).set(notificationMap);
+  }
+
+  Stream<Event?> getNotifications(){
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('notifications');
+    return databaseReference.child(firebaseAuth.currentUser!.uid).onValue;
+  }
+
+  Future updateNotificationStatus(bool isOpen,notificationId) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('notifications');
+    Map<String,dynamic> notificationMap = new HashMap();
+    notificationMap['isOpen'] = isOpen;
+    databaseReference.child(firebaseAuth.currentUser!.uid).child(notificationId).update(notificationMap);
+
+  }
 }

@@ -79,26 +79,32 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        child: Center(
+                      Center(
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              shape: BoxShape.rectangle,
+                              border: Border.all(width: 1.0, color: Colors.white)
+                          ),
                           child: GestureDetector(
-                              onTap: () async {
-                                pickImageFromGallery();
-                              },
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.transparent,
-                                child: file != null ? Image.file(file!,height: 100,width: 100,) : Icon(Icons.person),
-                              )
+                            onTap: () async {
+                              pickImageFromGallery();
+                            },
+                            child: file != null ?
+                            Image.file(file!,fit: BoxFit.scaleDown,) :
+                            Icon(Icons.person,size: 80,color: Colors.white,),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20,left: 20,right: 20,bottom: 20),
+                        padding: const EdgeInsets.only(top: 30,left: 20,right: 20,bottom: 20),
                         child: Form(
                           key: emailKey,
                           child: TextFormField(
                             controller: _emailController,
+                            style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder : OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -120,6 +126,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: TextFormField(
                             controller: _passwordController,
                             obscureText: true,
+                            style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder : OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -127,7 +134,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     ),
                                     borderRadius: BorderRadius.circular(20)
                                 ),
-                                prefixIcon: Icon(Icons.password_outlined),
+                                prefixIcon: Icon(Icons.password_outlined,color: Colors.white,),
                                 labelText: 'Password',
                                 labelStyle: TextStyle(fontFamily: 'source',color: Colors.white)
                             ),
@@ -140,6 +147,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           key: userNameKey,
                           child: TextFormField(
                             controller: _userNameController,
+                            style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder : OutlineInputBorder(
                                     borderSide: BorderSide(
