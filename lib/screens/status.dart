@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:language/models/user.dart';
 import 'package:language/screens/home.dart';
@@ -10,12 +9,11 @@ class StatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     UserModel? userModel = Provider.of<UserModel?>(context);
-    if(userModel != null){
-       print("Home page called");
-       return HomePage();
-    }  else {
+    if (userModel != null) {
+      print("Home page called");
+      return HomePage();
+    } else {
       print('Login Page Called');
       return LoginScreen();
     }

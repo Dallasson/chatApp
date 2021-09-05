@@ -23,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                 SizedBox(height: 5,),
-                Text('Nothing Found',style: TextStyle(color: Colors.white),)
+                Text('Something wrong...',style: TextStyle(color: Colors.white),)
               ],
             ),
           );
@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(imageUrl ?? ''),
+                        backgroundImage: NetworkImage(imageUrl ?? 'assets/images/error.png'),
                       ),
                     ),
                     SizedBox(height: 30,),
@@ -50,9 +50,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TextFormField(
                         initialValue: email ,
                         style: TextStyle(fontFamily: 'source',color: Colors.white),
-                        enabled: false,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          enabledBorder : OutlineInputBorder(
+                            borderSide:  BorderSide(
+                              color: Colors.white,
+                              width: 1,
+                              style: BorderStyle.solid
+                            )
+                          ),
                         ),
                       ),
                     ),
@@ -61,10 +66,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.only(bottom: 20,left: 20,right: 20),
                       child: TextFormField(
                         initialValue: userName,
-                        enabled: false,
                         style: TextStyle(fontFamily: 'source',color: Colors.white),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:  BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                  style: BorderStyle.solid
+                              )
+                          ),
                         ),
                       ),
                     )
@@ -78,14 +88,21 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
                     SizedBox(height: 5,),
-                    Text('Nothing Found',style: TextStyle(color: Colors.white),)
+                    Text('Something wrong...',style: TextStyle(color: Colors.white),)
                   ],
                 ),
               );
             }
         }
-        return  Center(
-          child: Text(''),
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
+              SizedBox(height: 5,),
+              Text('Something wrong...',style: TextStyle(color: Colors.white),)
+            ],
+          ),
         );
       },
     );

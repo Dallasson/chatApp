@@ -28,9 +28,8 @@ class _MyAppState extends State<MyApp> {
     return StreamProvider<UserModel?>.value(
       value: AuthService().onStatusChanged,
       initialData: null,
-      catchError: (_,__) => null,
+      catchError: (_, __) => null,
       child: StatusPage(),
     );
   }
 }
-

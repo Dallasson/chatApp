@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,6 @@ class RequestsPage extends StatefulWidget {
 }
 
 class _RequestsPageState extends State<RequestsPage> {
-
   List<RequestModel> list = [];
 
   String currentUserName = '';
@@ -31,36 +28,54 @@ class _RequestsPageState extends State<RequestsPage> {
       ),
       body: Column(
         children: [
-          Expanded(child: FutureBuilder<DataSnapshot>(
+          Expanded(
+              child: FutureBuilder<DataSnapshot>(
             future: AuthService().getFriendRequest(),
-            builder: (context,data){
-              if(data.hasError){
+            builder: (context, data) {
+              if (data.hasError) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
-                      SizedBox(height: 5,),
-                      Text('Nothing Found',style: TextStyle(color: Colors.white),)
+                      Image.asset(
+                        'assets/images/error.png',
+                        height: 70,
+                        width: 70,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'No Requests...',
+                        style: TextStyle(color: Colors.white),
+                      )
                     ],
                   ),
                 );
               }
-              if(data.connectionState == ConnectionState.done){
-                if(data.data!.exists){
-                  Map<dynamic,dynamic> map = data.data!.value;
-                  for(var child in map.values){
+              if (data.connectionState == ConnectionState.done) {
+                if (data.data!.exists) {
+                  Map<dynamic, dynamic> map = data.data!.value;
+                  for (var child in map.values) {
                     var userName = child['userName'];
                     var status = child['status'];
                     var senderId = child['senderId'];
+                    var receiverId = child['receiverId'];
                     var time = child['time'];
                     var url = child['imageUrl'];
 
-                    list.add(RequestModel(userName: userName, status: status, senderId: senderId, time: time,imageUrl: url));
+                    list.add(RequestModel(
+                        userName: userName,
+                        status: status,
+                        senderId: senderId,
+                        time: time,
+                        imageUrl: url,
+                        receiverId: receiverId));
                   }
                   return ListView.builder(
                     itemCount: list.length,
-                    itemBuilder: (context,index){
+                    itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(10),
                         child: Container(
@@ -71,57 +86,93 @@ class _RequestsPageState extends State<RequestsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Row(children: [
-                                  Container(
-                                    height : 40,
-                                    width : 60 ,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage(list[index].imageUrl),
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(list[index].userName,style: TextStyle(fontFamily: 'source',fontSize: 17),),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(list[index].status,style: TextStyle(fontFamily: 'source'),),
-                                      ),
-                                    ],
-                                  )
-                                ],),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Expanded(child: Padding(
-                                      padding: const EdgeInsets.only(left: 5,right: 5),
-                                      child: ElevatedButton(onPressed: (){
-
-                                        AuthService().pushNotification(currentUserName);
-                                        AuthService().updateFriendRequest('accepted',list[index].senderId,currentUserName,currentUserImageUrl);
-                                        AuthService().updateCurrentUserFriends('accepted',FirebaseAuth.instance.currentUser!.uid,list[index].senderId,list[index].userName,list[index].imageUrl);
-                                        AuthService().deleteUserFriendship(list[index].senderId);
-                                        setState(() {
-                                          list.removeAt(index);
-                                        });
-
-                                      }, child: Text('Accept')),
+                                    Container(
+                                      height: 40,
+                                      width: 60,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child: CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(list[index].imageUrl),
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            list[index].userName,
+                                            style: TextStyle(
+                                                fontFamily: 'source',
+                                                fontSize: 17),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: Text(
+                                            list[index].status,
+                                            style:
+                                                TextStyle(fontFamily: 'source'),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                        child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 5),
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            AuthService().pushNotification(
+                                                currentUserName,
+                                                list[index].senderId);
+                                            AuthService().updateFriendRequest(
+                                                'accepted',
+                                                list[index].senderId,
+                                                currentUserName,
+                                                currentUserImageUrl);
+                                            AuthService()
+                                                .updateCurrentUserFriends(
+                                                    'accepted',
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid,
+                                                    list[index].senderId,
+                                                    list[index].userName,
+                                                    list[index].imageUrl);
+                                            AuthService().deleteUserFriendship(
+                                                list[index].senderId);
+                                            setState(() {
+                                              list.removeAt(index);
+                                            });
+                                          },
+                                          child: Text('Accept')),
                                     )),
-                                    Expanded(child: Padding(
-                                      padding: const EdgeInsets.only(left: 5,right: 5),
-                                      child: ElevatedButton(onPressed: (){
-                                        AuthService().deleteUserFriendship(list[index].senderId);
-                                        setState(() {
-                                          list.removeAt(index);
-                                        });
-                                      }, child: Text('Reject')),
+                                    Expanded(
+                                        child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 5),
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            AuthService().deleteUserFriendship(
+                                                list[index].senderId);
+                                            setState(() {
+                                              list.removeAt(index);
+                                            });
+                                          },
+                                          child: Text('Reject')),
                                     ))
                                   ],
                                 )
@@ -132,15 +183,46 @@ class _RequestsPageState extends State<RequestsPage> {
                       );
                     },
                   );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/error.png',
+                          height: 70,
+                          width: 70,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'No Requests...',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                  );
                 }
               }
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
-                    SizedBox(height: 5,),
-                    Text('Nothing Found',style: TextStyle(color: Colors.white),)
+                    Image.asset(
+                      'assets/images/error.png',
+                      height: 70,
+                      width: 70,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'No Requests...',
+                      style: TextStyle(color: Colors.white),
+                    )
                   ],
                 ),
               );
@@ -148,15 +230,15 @@ class _RequestsPageState extends State<RequestsPage> {
           )),
           Container(
             height: 60,
-            child:  FutureBuilder<DataSnapshot>(
+            child: FutureBuilder<DataSnapshot>(
               future: AuthService().getUserDetails(),
-              builder: (context,data){
-                if(data.hasError){
+              builder: (context, data) {
+                if (data.hasError) {
                   return Center(
                     child: Text(''),
                   );
                 }
-                if(data.connectionState == ConnectionState.done){
+                if (data.connectionState == ConnectionState.done) {
                   currentUserName = data.data!.value['userName'];
                   currentUserImageUrl = data.data!.value['userImage'];
 
