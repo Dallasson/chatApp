@@ -29,15 +29,10 @@ class _FriendsPageState extends State<FriendsPage> {
                     'assets/images/error.png',
                     height: 70,
                     width: 70,
-                    color: Colors.white,
+                    color: Colors.black54,
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'No discussions...',
-                    style: TextStyle(color: Colors.white),
-                  )
+                  SizedBox(height: 5,),
+                  Text('No discussions...', style: TextStyle(color: Colors.black54),)
                 ],
               ),
             );
@@ -85,16 +80,15 @@ class _FriendsPageState extends State<FriendsPage> {
                                   children: [
                                     Text(
                                       list[index].name,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.black54,fontFamily: 'sf',fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
                                       height: 3,
                                     ),
                                     Container(
-                                      color: Colors.black12,
                                       child: Text(
                                         list[index].message,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.black54),
                                       ),
                                     )
                                   ],
@@ -105,7 +99,6 @@ class _FriendsPageState extends State<FriendsPage> {
                         ),
                       ),
                       onTap: () {
-                        print('id here ' +  FirebaseAuth.instance.currentUser!.uid);
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => PrivateChatPage(
@@ -125,14 +118,14 @@ class _FriendsPageState extends State<FriendsPage> {
                       'assets/images/error.png',
                       height: 70,
                       width: 70,
-                      color: Colors.white,
+                      color: Colors.black54,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
                       'No discussions...',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black54),
                     )
                   ],
                 ),

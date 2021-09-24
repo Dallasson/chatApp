@@ -102,45 +102,45 @@ class AuthService {
     userMessage['imageUrl'] = imageUrl;
     userMessage['userId'] = firebaseAuth.currentUser!.uid;
     userMessage['gallaryImage'] = galleryImage;
+    userMessage['time'] = DateTime.now().toString();
 
     await databaseReference.child('Messages').child(uuid.v1()).set(userMessage);
   }
 
   Stream<Event?> getMessages() {
-    DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl)
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl)
             .reference()
             .child('Messages');
-    return databaseReference.onValue;
+    return databaseReference.orderByChild('time').onValue;
   }
 
   Future sendPrivateMessage(
-      String message, String userName, String imageUrl, String userId) async {
-    DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl).reference().child('private');
-    DatabaseReference reference = FirebaseDatabase(databaseURL: databaseUrl)
-        .reference()
-        .child('lastMessage');
+      String message, String userName, String imageUrl, String userId,String currentUserId) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('private');
+    DatabaseReference reference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('lastMessage');
 
     Map<String, dynamic> userMessage = new HashMap();
     userMessage['message'] = message;
     userMessage['userName'] = userName;
     userMessage['imageUrl'] = imageUrl;
-    userMessage['userId'] = userId;
+    userMessage['userId'] = currentUserId;
+    userMessage['time'] = DateTime.now().toString();
 
     await databaseReference
         .child('privateMessages')
-        .child(firebaseAuth.currentUser!.uid)
+        .child(currentUserId)
         .child(uuid.v1())
         .set(userMessage);
+
     await databaseReference
         .child('privateMessages')
         .child(userId)
         .child(uuid.v1())
         .set(userMessage);
+
     await reference
         .child(userId)
-        .child(firebaseAuth.currentUser!.uid)
+        .child(currentUserId)
         .update(userMessage);
   }
 
@@ -150,6 +150,7 @@ class AuthService {
     return databaseReference
         .child('privateMessages')
         .child(firebaseAuth.currentUser!.uid)
+        .orderByChild('time')
         .onValue;
   }
 
@@ -243,9 +244,9 @@ class AuthService {
 
   Stream<Event?> getApprovals() {
     DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl)
-            .reference()
-            .child('approvals');
+    FirebaseDatabase(databaseURL: databaseUrl)
+        .reference()
+        .child('approvals');
     return databaseReference
         .child(firebaseAuth.currentUser!.uid)
         .orderByChild('status')
@@ -278,43 +279,32 @@ class AuthService {
     notificationMap['name'] = name;
     notificationMap['isOpen'] = false;
     notificationMap['time'] = DateTime.now().toString();
-    notificationMap['notificationId'] = uuid.v1();
+    notificationMap['notificationId'] = DateTime.now().millisecondsSinceEpoch;
 
-    await databaseReference.child(userId).child(uuid.v1()).set(notificationMap);
+    await databaseReference.child(userId).child(DateTime.now().millisecondsSinceEpoch.toString()).set(notificationMap);
   }
 
   Future<DataSnapshot?> getNotifications() async {
-    DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl)
-            .reference()
-            .child('notifications');
-    return databaseReference.child(firebaseAuth.currentUser!.uid).once();
+    print("notification bloc called");
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl)
+        .reference()
+        .child('notifications');
+    return  await databaseReference.child(firebaseAuth.currentUser!.uid).once();
   }
 
-  Future updateNotificationStatus(name, time, notificationId) async {
-    DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl)
-            .reference()
-            .child('notifications');
+  Future updateNotificationStatus(notificationId) async {
+    DatabaseReference databaseReference = FirebaseDatabase(databaseURL: databaseUrl).reference().child('notifications');
 
-    Map<String, dynamic> notificationMap = new HashMap();
-    notificationMap['isOpen'] = true;
-
-    databaseReference
+     databaseReference
         .child(firebaseAuth.currentUser!.uid)
         .child(notificationId)
-        .update(notificationMap);
+        .update({'isOpen' : true});
   }
 
   Future deleteNotification(notificationId) async {
-    DatabaseReference databaseReference =
-        FirebaseDatabase(databaseURL: databaseUrl)
-            .reference()
-            .child('notifications');
-
+    DatabaseReference databaseReference =   FirebaseDatabase(databaseURL: databaseUrl).reference().child('notifications');
     databaseReference
         .child(firebaseAuth.currentUser!.uid)
-        .child(notificationId)
         .remove();
   }
 }

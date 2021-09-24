@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:language/authentication/auth.dart';
 import 'package:language/screens/auth/password_recovery.dart';
 import 'package:language/screens/auth/registration.dart';
@@ -30,33 +31,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF1b1e44),
-      body: Column(
-        children: [
-          Container(
-            height: 200,
-            child: Center(
-              child: Text(
-                'Chatty',
-                style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'pacifico'),
-              ),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 20,),
+            Center(
+                child :  SvgPicture.asset("assets/svg/logo.svg")
             ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Color(0xff2a2b44),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30))),
+            SizedBox(height: 30,),
+            Text("Sign in to chat",style: TextStyle(fontFamily: 'sf',color: Colors.black,fontWeight: FontWeight.bold,fontSize:25),),
+            SizedBox(height: 10,),
+            Text("Get up And Chat with friends",style: TextStyle(fontFamily: 'sf',color: Colors.black,fontSize:15),),
+            SizedBox(height: 40,),
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
@@ -65,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         key: emailKey,
                         child: TextFormField(
                           controller: _emailController,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black38),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter your email';
@@ -73,16 +65,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                           decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(20)),
                               prefixIcon: Icon(
                                 Icons.email,
-                                color: Colors.white,
+                                color: Colors.black38,
                               ),
                               labelText: 'Email',
                               labelStyle: TextStyle(
-                                  fontFamily: 'source', color: Colors.white)),
+                                  fontFamily: 'sf', color: Colors.black38,fontSize: 16)),
                         ),
                       ),
                     ),
@@ -93,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: _passwordController,
                           obscureText: true,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black38),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter your password';
@@ -103,36 +92,32 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                           decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(20)),
                               prefixIcon: Icon(
                                 Icons.password_outlined,
-                                color: Colors.white,
+                                color: Colors.black38,
+                              ),
+                              suffixIcon: Icon(
+                                Icons.visibility,
+                                color: Colors.black38,
                               ),
                               labelText: 'Password',
                               labelStyle: TextStyle(
-                                  fontFamily: 'source', color: Colors.white)),
+                                  fontFamily: 'sf', color: Colors.black38,fontSize: 16)),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 40,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 40),
-                      child: GestureDetector(
+                    Center(
+                      child:  GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      PasswordRecoveryPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordRecoveryPage()));
                         },
                         child: Text(
                           'Forgot Password !',
                           style: TextStyle(
-                              fontFamily: 'source', color: Colors.white),
+                              fontFamily: 'sf', color: Colors.black38,fontSize: 13,fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -143,7 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(left: 40, right: 40),
                       child: Container(
                         width: double.infinity,
-                        child: ElevatedButton(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colors.indigo
+                        ),
+                        child: FlatButton(
                             onPressed: () {
                               if (emailKey.currentState!.validate() &&
                                   passwordKey.currentState!.validate()) {
@@ -154,9 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 String password = _passwordController.text;
 
                                 AuthService().loginUser(email, password, context)
-                                        .then((value){
+                                    .then((value){
                                   setState(() {
                                     isLoading = true;
+                                    _emailController.text = '';
+                                    _passwordController.text = '';
                                   });
                                   Navigator.pushReplacement(
                                       context, MaterialPageRoute(builder: (context) => HomePage()));
@@ -165,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Text(
                               'Login',
-                              style: TextStyle(fontFamily: 'source'),
+                              style: TextStyle(fontFamily: 'sf',color: Colors.white),
                             )),
                       ),
                     ),
@@ -183,26 +174,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'No Account!',
                           style: TextStyle(
-                              fontFamily: 'source', color: Colors.white),
+                              fontFamily: 'source', color: Colors.black38,fontSize: 14),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 50,
                     ),
-                    Visibility(
+                    Container(
+                      width: 100,
+                      child: Visibility(
                         visible: isLoading,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        ))
+                        child: LinearProgressIndicator(),
+                      ),
+                    )
                   ],
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

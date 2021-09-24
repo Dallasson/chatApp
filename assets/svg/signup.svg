@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="286.387" height="94.097" viewBox="0 0 286.387 94.097">
+  <defs>
+    <linearGradient id="linear-gradient" x1="1" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#44a6ff"/>
+      <stop offset="1" stop-color="#0081f6"/>
+    </linearGradient>
+    <filter id="Rectangle_176" x="0" y="0" width="286.387" height="94.097" filterUnits="userSpaceOnUse">
+      <feOffset dy="10" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#44a6ff" flood-opacity="0.2"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="sign_up_btn" data-name="sign up btn" transform="translate(-97.363 -779.544)">
+    <g transform="matrix(1, 0, 0, 1, 97.36, 779.54)" filter="url(#Rectangle_176)">
+      <rect id="Rectangle_176-2" data-name="Rectangle 176" width="256.387" height="64.097" rx="32.048" transform="translate(15 5)" fill="url(#linear-gradient)"/>
+    </g>
+    <text id="Sign_up" data-name="Sign up" transform="translate(209.363 821.055)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1" font-size="17" font-family="SegoeUI-Semibold, Segoe UI" font-weight="600"><tspan x="0" y="0">Sign up</tspan></text>
+  </g>
+</svg>

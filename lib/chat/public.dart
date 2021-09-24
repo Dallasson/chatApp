@@ -38,6 +38,15 @@ class _PublicPageState extends State<PublicPage> {
   late ImagePicker imagePicker;
 
   @override
+  void initState() {
+    super.initState();
+    AuthService().getUserDetails().then((value){
+      currentUserName = value.value['userName'];
+      currentUserImage = value.value['userImage'];
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     textEditingController.dispose();
@@ -61,6 +70,7 @@ class _PublicPageState extends State<PublicPage> {
 
     return Container(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
           Expanded(
             child:Container(
@@ -76,7 +86,7 @@ class _PublicPageState extends State<PublicPage> {
                             'assets/images/error.png',
                             height: 70,
                             width: 70,
-                            color: Colors.white,
+                            color: Colors.black54,
                           ),
                           SizedBox(
                             height: 5,
@@ -108,12 +118,9 @@ class _PublicPageState extends State<PublicPage> {
                             gallaryImage: galleryImage);
                         list.add(messageModel);
                       }
-
-
                       return ListView.builder(
                         itemCount: list.length,
                         itemBuilder: (context, index) {
-                          print('Id here' + list[index].userId);
                           return Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
@@ -138,18 +145,15 @@ class _PublicPageState extends State<PublicPage> {
                                         children: [
                                           Text(
                                             list[index].name,
-                                            style: TextStyle(
-                                                fontFamily: 'source',
-                                                color: Colors.white),
+                                            style: TextStyle(fontFamily: 'sf', color: Colors.black54,fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(
                                             height: 3,
                                           ),
                                           Container(
-                                            color: Colors.black12,
                                             child: Text(
                                               list[index].message,
-                                              style: TextStyle(color: Colors.white),
+                                              style: TextStyle(color: Colors.black54),
                                             ),
                                           )
                                         ],
@@ -162,10 +166,10 @@ class _PublicPageState extends State<PublicPage> {
                                         ? false
                                         : true,
                                     child: PopupMenuButton(
-                                      color: Color(0xff333652),
+                                      color: Colors.black54,
                                       icon: Icon(
                                         Icons.more_vert,
-                                        color: Colors.white,
+                                        color: Colors.black54,
                                       ),
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
@@ -177,17 +181,10 @@ class _PublicPageState extends State<PublicPage> {
                                                   color: Colors.white),
                                             ),
                                             onTap: () {
-                                              if (list[index].userId !=
-                                                  FirebaseAuth
-                                                      .instance.currentUser!.uid) {
+                                              if (list[index].userId != FirebaseAuth.instance.currentUser!.uid) {
+                                                print('Public id' + list[index].userId);
                                                 Navigator.pop(context);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PrivateChatPage(
-                                                                id: list[index]
-                                                                    .userId)));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateChatPage(id: list[index].userId)));
                                               }
                                             },
                                           ),
@@ -195,9 +192,7 @@ class _PublicPageState extends State<PublicPage> {
                                         PopupMenuItem(
                                             child: GestureDetector(
                                               onTap: () {
-                                                if (list[index].userId !=
-                                                    FirebaseAuth
-                                                        .instance.currentUser!.uid) {
+                                                if (list[index].userId != FirebaseAuth.instance.currentUser!.uid) {
                                                   AuthService().sendFriendRequest(
                                                     list[index].userId,
                                                     currentUserName,
@@ -234,14 +229,14 @@ class _PublicPageState extends State<PublicPage> {
                               'assets/images/error.png',
                               height: 70,
                               width: 70,
-                              color: Colors.white,
+                              color: Colors.black54,
                             ),
                             SizedBox(
                               height: 5,
                             ),
                             Text(
                               'No discussions...',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.black54),
                             )
                           ],
                         ),
@@ -255,99 +250,60 @@ class _PublicPageState extends State<PublicPage> {
               ),
             )),
           Container(
-          height: 60,
-          child: FutureBuilder<DataSnapshot>(
-            future: AuthService().getUserDetails(),
-            builder: (context, data) {
-              if (data.hasError) {
-                return Center(
-                  child: Text(''),
-                );
-              }
-              if (data.connectionState == ConnectionState.done) {
-                currentUserName = data.data!.value['userName'];
-                currentUserImage = data.data!.value['userImage'];
-
-                print('Current Image' + currentUserImage);
-                return Container(
-                  width: double.infinity,
-                  height: 60,
-                  child: Card(
-                    color: Color(0xff333652),
-                    elevation: 10,
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () async {
-                              PickedFile? file = await uploadImage();
-                              if (file != null) {
-                                await AuthService().uploadImage(file);
-                              }
-                              //File(file!.path) != null
-                              //upload
-                            },
-                            icon: Icon(
-                              Icons.add_a_photo,
-                              color: Colors.white,
-                            )),
-                        Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: TextFormField(
-                            controller: textEditingController,
-                            style: TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: 'Type Something..',
-                                hintStyle: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.white)),
-                          ),
-                        )),
-                        IconButton(
-                            onPressed: () {
-                              if (textEditingController.text.isNotEmpty) {
-                                AuthService().sendMessage(textEditingController.text, currentUserName, currentUserImage, userImage);
-                                textEditingController.text = '';
-                              } else {
-                                AuthService().sendMessage('', currentUserName, currentUserImage, userImage);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            ))
-                      ],
-                    ),
-                  ),
-                );
-              }
-              return Center(
-                child: Text(''),
-              );
-            },
-          ),
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+            child: Card(
+              elevation: 10,
+              child: Row(
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        PickedFile? file = await uploadImage();
+                        if (file != null) {
+                          await AuthService().uploadImage(file);
+                        }
+                        //File(file!.path) != null
+                        //upload
+                      },
+                      icon: Icon(
+                        Icons.add_a_photo,
+                        color: Colors.black54,
+                      )),
+                  Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TextFormField(
+                          controller: textEditingController,
+                          style: TextStyle(color: Colors.black38,fontFamily: 'sf'),
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: 'Type Something..',
+                              hintStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.black54)),
+                        ),
+                      )),
+                  IconButton(
+                      onPressed: () {
+                        if (textEditingController.text.isNotEmpty) {
+                          AuthService().sendMessage(textEditingController.text, currentUserName, currentUserImage, userImage);
+                          textEditingController.text = '';
+                        } else {
+                          AuthService().sendMessage('', currentUserName, currentUserImage, userImage);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.send,
+                        color: Colors.black54,
+                      ))
+                ],
+              ),
+            ),
         ),
-          // Container(
-          //   child: StreamBuilder<Event?>(
-          //     stream: AuthService().getApprovals(),
-          //     builder: (context,stream){
-          //       if(stream.connectionState == ConnectionState.active){
-          //          if(stream.data!.snapshot.exists){
-          //            Map<dynamic,dynamic> map = stream.data!.snapshot.value;
-          //            for(var child in map.values){
-          //              var senderId = child['senderId'];
-          //              var status = child['status'];
-          //            }
-          //          }
-          //       }
-          //     },
-          //   ),
-          // )
       ],
     ));
   }

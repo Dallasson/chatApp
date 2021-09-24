@@ -22,8 +22,8 @@ class _RequestsPageState extends State<RequestsPage> {
     list.clear();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF1b1e44),
-        title: Text('Requests'),
+        backgroundColor: Colors.white,
+        title: Text('Friendship Request',style: TextStyle(fontFamily: 'sf',color: Colors.black54,fontSize: 18),),
         automaticallyImplyLeading: false,
       ),
       body: Column(
@@ -41,14 +41,14 @@ class _RequestsPageState extends State<RequestsPage> {
                         'assets/images/error.png',
                         height: 70,
                         width: 70,
-                        color: Colors.white,
+                        color: Colors.black54,
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                         'No Requests...',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black54),
                       )
                     ],
                   ),
@@ -158,7 +158,8 @@ class _RequestsPageState extends State<RequestsPage> {
                                               list.removeAt(index);
                                             });
                                           },
-                                          child: Text('Accept')),
+                                          child: Text('Accept')
+                                        ,style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.indigo),),),
                                     )),
                                     Expanded(
                                         child: Padding(
@@ -172,8 +173,8 @@ class _RequestsPageState extends State<RequestsPage> {
                                               list.removeAt(index);
                                             });
                                           },
-                                          child: Text('Reject')),
-                                    ))
+                                          child: Text('Reject'),style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black38),),),),
+                                    )
                                   ],
                                 )
                               ],
@@ -192,14 +193,14 @@ class _RequestsPageState extends State<RequestsPage> {
                           'assets/images/error.png',
                           height: 70,
                           width: 70,
-                          color: Colors.white,
+                          color: Colors.black54,
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           'No Requests...',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black54),
                         )
                       ],
                     ),
@@ -214,14 +215,14 @@ class _RequestsPageState extends State<RequestsPage> {
                       'assets/images/error.png',
                       height: 70,
                       width: 70,
-                      color: Colors.white,
+                      color: Colors.black54,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
                       'No Requests...',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black54),
                     )
                   ],
                 ),

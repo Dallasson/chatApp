@@ -21,9 +21,9 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
+                Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.black54,),
                 SizedBox(height: 5,),
-                Text('Something wrong...',style: TextStyle(color: Colors.white),)
+                Text('Something wrong...',style: TextStyle(color: Colors.black54),)
               ],
             ),
           );
@@ -37,45 +37,32 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     SizedBox(height: 40,),
-                    Container(
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(imageUrl ?? 'assets/images/error.png'),
+                    Material(
+                      elevation: 12,
+                      borderRadius: BorderRadius.circular(60),
+                      child: Container(
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: NetworkImage(imageUrl ?? 'assets/images/error.png'),
+                        ),
                       ),
                     ),
                     SizedBox(height: 30,),
                     Padding(
-                      padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
+                      padding: const EdgeInsets.only(left: 40,right: 40,top: 20),
                       child: TextFormField(
                         initialValue: email ,
-                        style: TextStyle(fontFamily: 'source',color: Colors.white),
-                        decoration: InputDecoration(
-                          enabledBorder : OutlineInputBorder(
-                            borderSide:  BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                              style: BorderStyle.solid
-                            )
-                          ),
-                        ),
+                        style: TextStyle(fontFamily: 'sf',color: Colors.black38),
+
                       ),
                     ),
                     SizedBox(height: 30,),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20,left: 20,right: 20),
+                      padding: const EdgeInsets.only(bottom: 40,left:40,right: 20),
                       child: TextFormField(
                         initialValue: userName,
-                        style: TextStyle(fontFamily: 'source',color: Colors.white),
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:  BorderSide(
-                                  color: Colors.white,
-                                  width: 1,
-                                  style: BorderStyle.solid
-                              )
-                          ),
-                        ),
+                        style: TextStyle(fontFamily: 'source',color: Colors.black38),
                       ),
                     )
                   ],
@@ -86,9 +73,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
+                    Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.black54,),
                     SizedBox(height: 5,),
-                    Text('Something wrong...',style: TextStyle(color: Colors.white),)
+                    Text('Something wrong...',style: TextStyle(color: Colors.black54),)
                   ],
                 ),
               );
@@ -98,9 +85,9 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.white,),
+              Image.asset('assets/images/error.png',height: 70,width: 70,color: Colors.black54,),
               SizedBox(height: 5,),
-              Text('Something wrong...',style: TextStyle(color: Colors.white),)
+              Text('Something wrong...',style: TextStyle(color: Colors.black54),)
             ],
           ),
         );

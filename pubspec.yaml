@@ -38,6 +38,8 @@ dependencies:
   uuid: ^3.0.4
   flutter_local_notifications: ^8.1.1+2
   shared_preferences: ^2.0.7
+  flutter_svg: ^0.21.0+1
+
 
 
 dev_dependencies:
@@ -57,9 +59,13 @@ flutter:
      - family: source
        fonts:
          - asset: assets/fonts/source.ttf
+     - family: sf
+       fonts:
+         - asset: assets/fonts/sf.otf
 
   assets:
      - assets/images/
+     - assets/svg/
 
 
   uses-material-design: true

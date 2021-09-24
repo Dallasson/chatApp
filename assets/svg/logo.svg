@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.167" height="53.356" viewBox="0 0 56.167 53.356">
+  <defs>
+    <linearGradient id="linear-gradient" x1="1" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#44a6ff"/>
+      <stop offset="1" stop-color="#0081f6"/>
+    </linearGradient>
+    <filter id="Path_1470" x="0" y="1.069" width="56.167" height="52.286" filterUnits="userSpaceOnUse">
+      <feOffset dy="10" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#44a6ff" flood-opacity="0.2"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="logo" transform="translate(15)">
+    <path id="Path_1469" data-name="Path 1469" d="M102.345,1.99V15.62a2.033,2.033,0,0,1-1.592,1.99v3.681L97.072,17.61h-18.8a2,2,0,0,1-1.99-1.99V1.99A2,2,0,0,1,78.267,0h22.088A2,2,0,0,1,102.345,1.99Z" transform="translate(-69.015 0)" fill="#2b2b2b" opacity="0.2"/>
+    <g transform="matrix(1, 0, 0, 1, -15, 0)" filter="url(#Path_1470)">
+      <path id="Path_1470-2" data-name="Path 1470" d="M24.077,63.739H1.99A2,2,0,0,0,0,65.729V79.359a2,2,0,0,0,1.99,1.99h.995v4.676l4.676-4.676H24.177a2,2,0,0,0,1.99-1.99V65.729A2.154,2.154,0,0,0,24.077,63.739Z" transform="translate(15 -57.67)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>
